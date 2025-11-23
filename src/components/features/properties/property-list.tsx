@@ -19,9 +19,11 @@ interface Property {
 
 interface PropertyListProps {
   properties: Property[]
+  onEdit?: (property: Property) => void
+  onDelete?: (id: string) => void
 }
 
-export function PropertyList({ properties }: PropertyListProps) {
+export function PropertyList({ properties, onEdit, onDelete }: PropertyListProps) {
   const [searchTerm, setSearchTerm] = React.useState('')
   const [typeFilter, setTypeFilter] = React.useState('all')
   const [sortBy, setSortBy] = React.useState('name')
@@ -157,7 +159,12 @@ export function PropertyList({ properties }: PropertyListProps) {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {sortedProperties.map((property) => (
-            <PropertyCard key={property.id} {...property} />
+            <PropertyCard
+              key={property.id}
+              {...property}
+              onEdit={onEdit ? () => onEdit(property) : undefined}
+              onDelete={onDelete ? () => onDelete(property.id) : undefined}
+            />
           ))}
         </div>
       )}

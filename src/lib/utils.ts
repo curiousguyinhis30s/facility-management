@@ -11,11 +11,12 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * Format currency with proper symbol and decimals
+ * Default: Saudi Riyal (SAR)
  */
 export function formatCurrency(
   amount: number,
-  currency: string = 'USD',
-  locale: string = 'en-US'
+  currency: string = 'SAR',
+  locale: string = 'ar-SA'
 ): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
