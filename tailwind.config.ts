@@ -10,94 +10,47 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Minimal Professional Design System
-        // Monochromatic with subtle accents
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: '#171717', // Almost black - professional, minimal
-          50: '#FAFAFA',
-          100: '#F5F5F5',
-          200: '#E5E5E5',
-          300: '#D4D4D4',
-          400: '#A3A3A3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
         },
         accent: {
-          DEFAULT: '#0A0A0A', // Deep black for emphasis
-          light: '#404040',
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
         },
-        success: {
-          DEFAULT: '#22C55E', // Subtle green
-          50: '#F0FDF4',
-          100: '#DCFCE7',
-          500: '#22C55E',
-          600: '#16A34A',
-          700: '#15803D',
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
-        warning: {
-          DEFAULT: '#F59E0B', // Amber for attention
-          50: '#FFFBEB',
-          100: '#FEF3C7',
-          500: '#F59E0B',
-          600: '#D97706',
-          700: '#B45309',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
-        danger: {
-          DEFAULT: '#EF4444', // Red for critical
-          50: '#FEF2F2',
-          100: '#FEE2E2',
-          500: '#EF4444',
-          600: '#DC2626',
-          700: '#B91C1C',
-        },
-        // Neutral palette for backgrounds
-        background: {
-          DEFAULT: '#FFFFFF',
-          secondary: '#FAFAFA',
-          tertiary: '#F5F5F5',
-        },
-        border: {
-          DEFAULT: '#E5E5E5',
-          light: '#F5F5F5',
-        },
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-      },
-      fontSize: {
-        // 8px base unit, modular scale
-        xs: ['0.75rem', { lineHeight: '1.5' }],
-        sm: ['0.875rem', { lineHeight: '1.5' }],
-        base: ['1rem', { lineHeight: '1.5' }],
-        lg: ['1.125rem', { lineHeight: '1.5' }],
-        xl: ['1.25rem', { lineHeight: '1.4' }],
-        '2xl': ['1.5rem', { lineHeight: '1.3' }],
-        '3xl': ['1.875rem', { lineHeight: '1.2' }],
-        '4xl': ['2.25rem', { lineHeight: '1.1' }],
-      },
-      spacing: {
-        // 8px base unit
-        '0': '0',
-        '1': '0.125rem', // 2px
-        '2': '0.25rem',  // 4px
-        '3': '0.5rem',   // 8px (base)
-        '4': '0.75rem',  // 12px
-        '5': '1rem',     // 16px
-        '6': '1.5rem',   // 24px
-        '8': '2rem',     // 32px
-        '10': '2.5rem',  // 40px
-        '12': '3rem',    // 48px
-        '16': '4rem',    // 64px
-      },
-      borderRadius: {
-        sm: '0.25rem',
-        DEFAULT: '0.5rem',
-        md: '0.5rem',
-        lg: '0.75rem',
-        xl: '1rem',
       },
     },
   },

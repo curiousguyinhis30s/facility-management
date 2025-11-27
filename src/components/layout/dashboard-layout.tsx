@@ -3,8 +3,11 @@
 import * as React from 'react'
 import { Sidebar } from './sidebar'
 import { Header } from './header'
+import { cn } from '@/lib/utils'
+import { useData } from '@/contexts/DataContext'
 
-const navigation = [
+// Base navigation items (badges will be added dynamically)
+const baseNavigation = [
   {
     title: 'Dashboard',
     href: '/',
@@ -14,6 +17,19 @@ const navigation = [
           strokeLinecap="round"
           strokeLinejoin="round"
           d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: 'Canvas',
+    href: '/canvas',
+    icon: (
+      <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"
         />
       </svg>
     ),
@@ -43,7 +59,7 @@ const navigation = [
         />
       </svg>
     ),
-    badge: '145',
+    badgeKey: 'tenants',
   },
   {
     title: 'Leases',
@@ -59,8 +75,8 @@ const navigation = [
     ),
   },
   {
-    title: 'Work Orders',
-    href: '/work-orders',
+    title: 'Maintenance',
+    href: '/maintenance-hub',
     icon: (
       <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
         <path
@@ -70,20 +86,7 @@ const navigation = [
         />
       </svg>
     ),
-    badge: '12',
-  },
-  {
-    title: 'Maintenance',
-    href: '/maintenance',
-    icon: (
-      <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
-        />
-      </svg>
-    ),
+    badgeKey: 'openWorkOrders',
   },
   {
     title: 'Payments',
@@ -112,14 +115,14 @@ const navigation = [
     ),
   },
   {
-    title: 'Reports',
-    href: '/reports',
+    title: 'Analytics',
+    href: '/analytics',
     icon: (
       <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
+          d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
         />
       </svg>
     ),
@@ -146,18 +149,60 @@ const navigation = [
 
 interface DashboardLayoutProps {
   children: React.ReactNode
-  title: string
+  title: string | React.ReactNode
   actions?: React.ReactNode
 }
 
 export function DashboardLayout({ children, title, actions }: DashboardLayoutProps) {
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
+  const { tenants, workOrders, leases } = useData()
+
+  // Calculate dynamic badge counts
+  const badgeCounts = React.useMemo(() => ({
+    tenants: tenants.length,
+    openWorkOrders: workOrders.filter(wo => wo.status === 'open' || wo.status === 'in_progress').length,
+    activeLeases: leases.filter(l => l.status === 'active').length,
+  }), [tenants, workOrders, leases])
+
+  // Generate navigation with dynamic badges
+  const navigation = React.useMemo(() =>
+    baseNavigation.map(item => ({
+      ...item,
+      badge: item.badgeKey ? String(badgeCounts[item.badgeKey as keyof typeof badgeCounts] || 0) : undefined,
+    })),
+    [badgeCounts]
+  )
+
+  // Persist sidebar state in localStorage
+  React.useEffect(() => {
+    const saved = localStorage.getItem('sidebar-collapsed')
+    if (saved !== null) {
+      setSidebarCollapsed(saved === 'true')
+    }
+  }, [])
+
+  const toggleSidebar = () => {
+    const newValue = !sidebarCollapsed
+    setSidebarCollapsed(newValue)
+    localStorage.setItem('sidebar-collapsed', String(newValue))
+  }
+
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-background">
       {/* Sidebar */}
-      <Sidebar navItems={navigation} />
+      <Sidebar
+        navItems={navigation}
+        collapsed={sidebarCollapsed}
+        onToggle={toggleSidebar}
+      />
 
       {/* Main Content */}
-      <div className="flex flex-1 flex-col overflow-hidden ml-64">
+      <div
+        className={cn(
+          'flex flex-1 flex-col overflow-hidden transition-[margin] duration-200 ease-out',
+          sidebarCollapsed ? 'ml-16' : 'ml-56'
+        )}
+      >
         {/* Header */}
         <Header title={title} actions={actions} />
 

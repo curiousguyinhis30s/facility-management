@@ -8,7 +8,7 @@ interface PropertyCardProps {
   id: string
   name: string
   address: string
-  type: 'condo' | 'apartment' | 'warehouse' | 'shoplot' | 'house'
+  type: 'condo' | 'apartment' | 'warehouse' | 'shoplot' | 'house' | 'commercial'
   totalUnits: number
   occupiedUnits: number
   monthlyRevenue: number
@@ -17,20 +17,22 @@ interface PropertyCardProps {
   onDelete?: () => void
 }
 
-const propertyTypeLabels = {
+const propertyTypeLabels: Record<string, string> = {
   condo: 'Condominium',
   apartment: 'Apartment',
   warehouse: 'Warehouse',
   shoplot: 'Shoplot',
   house: 'House',
+  commercial: 'Commercial',
 }
 
-const propertyTypeColors = {
+const propertyTypeColors: Record<string, string> = {
   condo: 'bg-primary',
   apartment: 'bg-success',
   warehouse: 'bg-warning',
   shoplot: 'bg-danger',
-  house: 'bg-gray-600',
+  house: 'bg-black/60',
+  commercial: 'bg-indigo-600',
 }
 
 export function PropertyCard({
@@ -53,7 +55,7 @@ export function PropertyCard({
       <Link href={`/properties/${id}`}>
         <Card className="group cursor-pointer transition-all hover:shadow-lg hover:border-primary">
         {/* Property Image */}
-        <div className="relative h-48 w-full overflow-hidden rounded-t-lg bg-gray-200">
+        <div className="relative h-48 w-full overflow-hidden rounded-t-lg bg-black/[0.08]">
           {imageUrl ? (
             <img
               src={imageUrl}
@@ -61,9 +63,9 @@ export function PropertyCard({
               className="h-full w-full object-cover transition-transform group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="flex h-full items-center justify-center bg-gradient-to-br from-black/[0.04] to-black/[0.08]">
               <svg
-                className="h-20 w-20 text-gray-400"
+                className="h-20 w-20 text-black/40"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
@@ -107,7 +109,7 @@ export function PropertyCard({
           <CardTitle className="text-lg">{name}</CardTitle>
           <CardDescription className="flex items-start">
             <svg
-              className="mr-1 mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400"
+              className="mr-1 mt-0.5 h-4 w-4 flex-shrink-0 text-black/40"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth="1.5"
@@ -132,13 +134,13 @@ export function PropertyCard({
           <div className="grid grid-cols-3 gap-4">
             {/* Total Units */}
             <div>
-              <p className="text-sm text-gray-500">Total Units</p>
-              <p className="text-2xl font-semibold text-gray-900">{totalUnits}</p>
+              <p className="text-sm text-black/50">Total Units</p>
+              <p className="text-2xl font-semibold text-black">{totalUnits}</p>
             </div>
 
             {/* Vacant Units */}
             <div>
-              <p className="text-sm text-gray-500">Vacant</p>
+              <p className="text-sm text-black/50">Vacant</p>
               <p
                 className={`text-2xl font-semibold ${
                   vacantUnits === 0 ? 'text-success' : 'text-warning'
@@ -150,8 +152,8 @@ export function PropertyCard({
 
             {/* Monthly Revenue */}
             <div>
-              <p className="text-sm text-gray-500">Revenue/Mo</p>
-              <p className="text-2xl font-semibold text-gray-900">
+              <p className="text-sm text-black/50">Revenue/Mo</p>
+              <p className="text-2xl font-semibold text-black">
                 {formatCurrency(monthlyRevenue)}
               </p>
             </div>
@@ -170,7 +172,7 @@ export function PropertyCard({
               e.stopPropagation()
               onEdit()
             }}
-            className="rounded-lg bg-white p-2 shadow-md hover:bg-gray-100 transition-colors"
+            className="rounded-lg bg-white p-2 shadow-md hover:bg-black/[0.04] transition-colors"
             title="Edit property"
           >
             <svg

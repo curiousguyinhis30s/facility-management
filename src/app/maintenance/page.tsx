@@ -126,23 +126,23 @@ export default function MaintenancePage() {
       <div className="grid gap-6 md:grid-cols-4 mb-6">
         <Card>
           <CardContent className="p-6">
-            <div className="text-sm text-gray-500">Total Tasks</div>
-            <div className="mt-2 text-3xl font-semibold text-gray-900">{stats.total}</div>
-            <div className="mt-2 text-sm text-gray-500">Scheduled</div>
+            <div className="text-sm text-black/50">Total Tasks</div>
+            <div className="mt-2 text-3xl font-semibold text-black">{stats.total}</div>
+            <div className="mt-2 text-sm text-black/50">Scheduled</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-6">
-            <div className="text-sm text-gray-500">Upcoming</div>
+            <div className="text-sm text-black/50">Upcoming</div>
             <div className="mt-2 text-3xl font-semibold text-primary">{stats.upcoming}</div>
-            <div className="mt-2 text-sm text-gray-500">In next 30 days</div>
+            <div className="mt-2 text-sm text-black/50">In next 30 days</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-6">
-            <div className="text-sm text-gray-500">Overdue</div>
+            <div className="text-sm text-black/50">Overdue</div>
             <div className="mt-2 text-3xl font-semibold text-danger">{stats.overdue}</div>
             <div className="mt-2 text-sm text-danger">Needs attention</div>
           </CardContent>
@@ -150,7 +150,7 @@ export default function MaintenancePage() {
 
         <Card>
           <CardContent className="p-6">
-            <div className="text-sm text-gray-500">Scheduled</div>
+            <div className="text-sm text-black/50">Scheduled</div>
             <div className="mt-2 text-3xl font-semibold text-success">{stats.scheduled}</div>
             <div className="mt-2 text-sm text-success">On track</div>
           </CardContent>
@@ -187,7 +187,7 @@ export default function MaintenancePage() {
               className="w-40"
             />
 
-            <div className="ml-auto text-sm text-gray-500">
+            <div className="ml-auto text-sm text-black/50">
               Showing {filteredSchedule.length} of {schedule.length} tasks
             </div>
           </div>
@@ -199,56 +199,56 @@ export default function MaintenancePage() {
         <CardContent className="p-6">
           {filteredSchedule.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-12">
-              <svg className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+              <svg className="h-12 w-12 text-black/30" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
               </svg>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900">No maintenance tasks found</h3>
-              <p className="mt-2 text-sm text-gray-500">Try adjusting your filters</p>
+              <h3 className="mt-4 text-lg font-semibold text-black">No maintenance tasks found</h3>
+              <p className="mt-2 text-sm text-black/50">Try adjusting your filters</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="border-b border-gray-200">
+                <thead className="border-b border-black/[0.08]">
                   <tr>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Task</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Property</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Category</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Frequency</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Last Completed</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Next Due</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Assigned To</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th className="pb-3 text-right text-sm font-semibold text-gray-900">Actions</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Task</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Property</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Category</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Frequency</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Last Completed</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Next Due</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Assigned To</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Status</th>
+                    <th className="pb-3 text-right text-sm font-semibold text-black">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-black/[0.08]">
                   {filteredSchedule.map((task) => {
                     const daysUntil = getDaysUntil(task.nextDue)
                     return (
-                      <tr key={task.id} className="hover:bg-gray-50">
+                      <tr key={task.id} className="hover:bg-black/[0.02] transition-colors duration-100">
                         <td className="py-4">
-                          <div className="font-medium text-gray-900">{task.title}</div>
-                          <div className="text-sm text-gray-500">{task.location}</div>
+                          <div className="font-medium text-black">{task.title}</div>
+                          <div className="text-sm text-black/50">{task.location}</div>
                         </td>
-                        <td className="py-4 text-sm text-gray-600">{task.property}</td>
+                        <td className="py-4 text-sm text-black/70">{task.property}</td>
                         <td className="py-4">
                           <Badge variant="secondary">{task.category}</Badge>
                         </td>
-                        <td className="py-4 text-sm text-gray-600">{task.frequency}</td>
-                        <td className="py-4 text-sm text-gray-600">
+                        <td className="py-4 text-sm text-black/70">{task.frequency}</td>
+                        <td className="py-4 text-sm text-black/70">
                           {formatDate(task.lastCompleted, { month: 'short', day: 'numeric' })}
                         </td>
                         <td className="py-4">
-                          <div className={`text-sm font-medium ${task.status === 'overdue' ? 'text-danger' : 'text-gray-900'}`}>
+                          <div className={`text-sm font-medium ${task.status === 'overdue' ? 'text-danger' : 'text-black'}`}>
                             {formatDate(task.nextDue, { month: 'short', day: 'numeric' })}
                           </div>
                           {daysUntil >= 0 ? (
-                            <div className="text-xs text-gray-500">in {daysUntil} days</div>
+                            <div className="text-xs text-black/50">in {daysUntil} days</div>
                           ) : (
                             <div className="text-xs text-danger">{Math.abs(daysUntil)} days overdue</div>
                           )}
                         </td>
-                        <td className="py-4 text-sm text-gray-600">{task.assignedTo}</td>
+                        <td className="py-4 text-sm text-black/70">{task.assignedTo}</td>
                         <td className="py-4">
                           <Badge
                             variant={
@@ -267,7 +267,7 @@ export default function MaintenancePage() {
                         <td className="py-4 text-right">
                           <div className="flex justify-end gap-2">
                             <button
-                              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-success"
+                              className="rounded-lg p-2 text-black/40 hover:bg-black/[0.04] hover:text-success transition-colors duration-150"
                               title="Mark as complete"
                             >
                               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -275,7 +275,7 @@ export default function MaintenancePage() {
                               </svg>
                             </button>
                             <button
-                              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-primary"
+                              className="rounded-lg p-2 text-black/40 hover:bg-black/[0.04] hover:text-primary transition-colors duration-150"
                               title="Edit schedule"
                             >
                               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">

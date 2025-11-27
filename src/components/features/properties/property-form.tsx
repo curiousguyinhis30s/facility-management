@@ -3,18 +3,34 @@
 import React from 'react'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
+import { ImageUpload } from '@/components/ui/image-upload'
+import { FormSidePanel } from '@/components/ui/side-panel'
+import { CustomFields, CustomField, serializeCustomFields, deserializeCustomFields } from '@/components/ui/custom-fields'
+
+type PropertyType = 'condo' | 'apartment' | 'warehouse' | 'shoplot' | 'house' | 'commercial'
+
+interface PropertyFormData {
+  name: string
+  address: string
+  type: PropertyType
+  totalUnits: number
+  imageUrl: string
+  notes: string
+  customFields: Record<string, { value: string; type: string }>
+}
 
 interface PropertyFormProps {
   property?: {
     id: string
     name: string
     address: string
-    type: 'condo' | 'apartment' | 'warehouse' | 'shoplot' | 'house'
+    type: PropertyType
     totalUnits: number
     imageUrl?: string
+    notes?: string
+    customFields?: Record<string, { value: string; type: string }>
   } | null
-  onSubmit: (data: any) => void
+  onSubmit: (data: PropertyFormData) => void
   onClose: () => void
 }
 
@@ -25,9 +41,20 @@ export function PropertyForm({ property, onSubmit, onClose }: PropertyFormProps)
     type: property?.type || 'apartment',
     totalUnits: property?.totalUnits || 0,
     imageUrl: property?.imageUrl || '',
+    notes: property?.notes || '',
+    yearBuilt: '',
+    parkingSpaces: '',
+    amenities: '',
+    managementContact: '',
+    managementEmail: '',
   })
 
+  const [customFields, setCustomFields] = React.useState<CustomField[]>(
+    deserializeCustomFields(property?.customFields)
+  )
+
   const [errors, setErrors] = React.useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
 
   const validate = () => {
     const newErrors: Record<string, string> = {}
@@ -48,10 +75,17 @@ export function PropertyForm({ property, onSubmit, onClose }: PropertyFormProps)
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (validate()) {
-      onSubmit(formData)
+      setIsSubmitting(true)
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      onSubmit({
+        ...formData,
+        type: formData.type as PropertyType,
+        customFields: serializeCustomFields(customFields),
+      })
+      setIsSubmitting(false)
     }
   }
 
@@ -61,64 +95,64 @@ export function PropertyForm({ property, onSubmit, onClose }: PropertyFormProps)
     { value: 'warehouse', label: 'Warehouse' },
     { value: 'shoplot', label: 'Shop Lot' },
     { value: 'house', label: 'House' },
+    { value: 'commercial', label: 'Commercial' },
   ]
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-gray-900">
-            {property ? 'Edit Property' : 'Add New Property'}
-          </h2>
-          <button
-            onClick={onClose}
-            className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-900"
-          >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
+    <FormSidePanel
+      isOpen={true}
+      onClose={onClose}
+      title={property ? 'Edit Property' : 'Add New Property'}
+      onSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
+      submitText={property ? 'Update Property' : 'Add Property'}
+      width="lg"
+    >
+      {/* Basic Info - Compact Grid */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <label className="block text-sm font-medium text-black/70 mb-1">
+            Property Name <span className="text-danger">*</span>
+          </label>
           <Input
-            label="Property Name"
             placeholder="e.g., Sunset Apartments"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             error={errors.name}
             required
           />
+        </div>
 
+        <div className="sm:col-span-2">
+          <label className="block text-sm font-medium text-black/70 mb-1">
+            Address <span className="text-danger">*</span>
+          </label>
           <Input
-            label="Address"
             placeholder="e.g., 123 Main St, Los Angeles, CA 90001"
             value={formData.address}
             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
             error={errors.address}
             required
           />
+        </div>
 
+        <div>
+          <label className="block text-sm font-medium text-black/70 mb-1">
+            Property Type
+          </label>
           <Select
-            label="Property Type"
             value={formData.type}
             options={propertyTypes}
-            onChange={(e) => setFormData({ ...formData, type: e.target.value as any })}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value as PropertyType })}
             required
           />
+        </div>
 
+        <div>
+          <label className="block text-sm font-medium text-black/70 mb-1">
+            Total Units <span className="text-danger">*</span>
+          </label>
           <Input
-            label="Total Units"
             type="number"
             min="1"
             value={formData.totalUnits}
@@ -128,25 +162,117 @@ export function PropertyForm({ property, onSubmit, onClose }: PropertyFormProps)
             error={errors.totalUnits}
             required
           />
-
-          <Input
-            label="Image URL"
-            placeholder="https://example.com/image.jpg (optional)"
-            value={formData.imageUrl}
-            onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-            helperText="Optional: Add an image URL for the property"
-          />
-
-          <div className="flex justify-end space-x-3 pt-4">
-            <Button type="button" variant="secondary" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button type="submit" variant="primary">
-              {property ? 'Update Property' : 'Add Property'}
-            </Button>
-          </div>
-        </form>
+        </div>
       </div>
-    </div>
+
+      {/* Property Details - Compact */}
+      <div className="border-t border-black/[0.08] pt-4">
+        <h3 className="text-sm font-semibold text-black mb-3">Property Details</h3>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div>
+            <label className="block text-sm font-medium text-black/70 mb-1">
+              Year Built
+            </label>
+            <Input
+              type="number"
+              placeholder="2010"
+              value={formData.yearBuilt}
+              onChange={(e) => setFormData({ ...formData, yearBuilt: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-black/70 mb-1">
+              Parking Spaces
+            </label>
+            <Input
+              type="number"
+              placeholder="50"
+              value={formData.parkingSpaces}
+              onChange={(e) => setFormData({ ...formData, parkingSpaces: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-black/70 mb-1">
+              Amenities
+            </label>
+            <Input
+              placeholder="Pool, Gym..."
+              value={formData.amenities}
+              onChange={(e) => setFormData({ ...formData, amenities: e.target.value })}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Management Contact - Compact */}
+      <div className="border-t border-black/[0.08] pt-4">
+        <h3 className="text-sm font-semibold text-black mb-3">Management Contact</h3>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label className="block text-sm font-medium text-black/70 mb-1">
+              Contact Name
+            </label>
+            <Input
+              placeholder="John Smith"
+              value={formData.managementContact}
+              onChange={(e) => setFormData({ ...formData, managementContact: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-black/70 mb-1">
+              Contact Email
+            </label>
+            <Input
+              type="email"
+              placeholder="manager@property.com"
+              value={formData.managementEmail}
+              onChange={(e) => setFormData({ ...formData, managementEmail: e.target.value })}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Property Image - Compact */}
+      <div className="border-t border-black/[0.08] pt-4">
+        <h3 className="text-sm font-semibold text-black mb-3">Property Image</h3>
+        <ImageUpload
+          value={formData.imageUrl}
+          onChange={(imageData) => setFormData({ ...formData, imageUrl: imageData })}
+          helperText="Upload a photo (optional)"
+          maxSizeMB={5}
+          aspectRatio="16/9"
+        />
+      </div>
+
+      {/* Notes - Compact */}
+      <div className="border-t border-black/[0.08] pt-4">
+        <label className="block text-sm font-medium text-black/70 mb-1">
+          Notes
+        </label>
+        <textarea
+          value={formData.notes}
+          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+          placeholder="Property notes (maintenance, HOA info)..."
+          rows={2}
+          className="w-full rounded-lg border border-black/20 bg-white px-3 py-2 text-sm text-black placeholder:text-black/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
+        />
+      </div>
+
+      {/* Custom Fields */}
+      <div className="border-t border-black/[0.08] pt-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-semibold text-black">Custom Fields</h3>
+          <span className="text-xs text-black/50">{customFields.length}/10</span>
+        </div>
+        <CustomFields
+          fields={customFields}
+          onChange={setCustomFields}
+          maxFields={10}
+        />
+      </div>
+    </FormSidePanel>
   )
 }

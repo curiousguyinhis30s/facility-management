@@ -2,12 +2,13 @@
 
 import React from 'react'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { formatCurrency, formatDate } from '@/lib/utils'
+import { EmptyState, SearchEmptyState } from '@/components/ui/empty-state'
 
 // Mock payment data
 const mockPayments = [
@@ -142,142 +143,162 @@ export default function PaymentsPage() {
         </Button>
       }
     >
-      {/* Stats */}
-      <div className="grid gap-6 md:grid-cols-4 mb-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-gray-500">Total Collected</div>
-            <div className="mt-2 text-3xl font-semibold text-gray-900">
-              {formatCurrency(stats.totalCollected)}
-            </div>
-            <div className="mt-2 text-sm text-success">All time</div>
-          </CardContent>
-        </Card>
+      {/* Compact Stats Row */}
+      <div className="flex flex-wrap items-center gap-6 mb-4 pb-4 border-b border-black/[0.06]">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+            <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <div className="text-xl font-semibold text-green-600">{formatCurrency(stats.totalCollected)}</div>
+            <div className="text-[11px] text-black/50">Total Collected</div>
+          </div>
+        </div>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-gray-500">This Month</div>
-            <div className="mt-2 text-3xl font-semibold text-gray-900">
-              {formatCurrency(stats.thisMonth)}
-            </div>
-            <div className="mt-2 text-sm text-success">Collected</div>
-          </CardContent>
-        </Card>
+        <div className="w-px h-8 bg-black/10" />
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-gray-500">Pending</div>
-            <div className="mt-2 text-3xl font-semibold text-warning">
-              {formatCurrency(stats.pending)}
-            </div>
-            <div className="mt-2 text-sm text-gray-500">Awaiting payment</div>
-          </CardContent>
-        </Card>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+            <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+          </div>
+          <div>
+            <div className="text-xl font-semibold text-blue-600">{formatCurrency(stats.thisMonth)}</div>
+            <div className="text-[11px] text-black/50">This Month</div>
+          </div>
+        </div>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-gray-500">Overdue</div>
-            <div className="mt-2 text-3xl font-semibold text-danger">
-              {formatCurrency(stats.overdue)}
-            </div>
-            <div className="mt-2 text-sm text-danger">Requires action</div>
-          </CardContent>
-        </Card>
+        <div className="w-px h-8 bg-black/10" />
+
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+            <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <div className="text-xl font-semibold text-amber-600">{formatCurrency(stats.pending)}</div>
+            <div className="text-[11px] text-black/50">Pending</div>
+          </div>
+        </div>
+
+        <div className="w-px h-8 bg-black/10" />
+
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+            <svg className="w-4 h-4 text-red-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+          </div>
+          <div>
+            <div className="text-xl font-semibold text-red-600">{formatCurrency(stats.overdue)}</div>
+            <div className="text-[11px] text-black/50">Overdue</div>
+          </div>
+        </div>
       </div>
 
-      {/* Filters */}
-      <Card className="mb-6">
-        <CardContent className="p-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <Input
-              type="search"
-              placeholder="Search payments..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-sm"
-            />
+      {/* Filters - Compact inline */}
+      <div className="flex items-center gap-3 mb-4 px-3 py-2 bg-black/[0.02] rounded-lg border border-black/[0.06]">
+        <Input
+          type="search"
+          placeholder="Search payments..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-52 h-8 text-sm"
+        />
 
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Statuses' },
-                { value: 'completed', label: 'Completed' },
-                { value: 'pending', label: 'Pending' },
-                { value: 'overdue', label: 'Overdue' },
-              ]}
-              className="w-40"
-            />
+        <Select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          options={[
+            { value: 'all', label: 'All Statuses' },
+            { value: 'completed', label: 'Completed' },
+            { value: 'pending', label: 'Pending' },
+            { value: 'overdue', label: 'Overdue' },
+          ]}
+          className="w-32 h-8 text-sm"
+        />
 
-            <Select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Types' },
-                { value: 'rent', label: 'Rent' },
-                { value: 'late_fee', label: 'Late Fee' },
-                { value: 'security_deposit', label: 'Security Deposit' },
-                { value: 'maintenance', label: 'Maintenance' },
-              ]}
-              className="w-48"
-            />
+        <Select
+          value={typeFilter}
+          onChange={(e) => setTypeFilter(e.target.value)}
+          options={[
+            { value: 'all', label: 'All Types' },
+            { value: 'rent', label: 'Rent' },
+            { value: 'late_fee', label: 'Late Fee' },
+            { value: 'security_deposit', label: 'Deposit' },
+            { value: 'maintenance', label: 'Maintenance' },
+          ]}
+          className="w-32 h-8 text-sm"
+        />
 
-            <div className="ml-auto text-sm text-gray-500">
-              Showing {filteredPayments.length} of {payments.length} payments
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        <span className="ml-auto text-xs text-black/50 whitespace-nowrap">
+          {filteredPayments.length} of {payments.length}
+        </span>
+      </div>
 
       {/* Payments List */}
       <Card>
         <CardContent className="p-6">
           {filteredPayments.length === 0 ? (
-            <div className="flex flex-col items-center justify-center p-12">
-              <svg className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
-              </svg>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900">No payments found</h3>
-              <p className="mt-2 text-sm text-gray-500">
-                {searchTerm || statusFilter !== 'all' || typeFilter !== 'all'
-                  ? 'Try adjusting your search or filters'
-                  : 'Payment transactions will appear here'}
-              </p>
-            </div>
+            searchTerm || statusFilter !== 'all' || typeFilter !== 'all' ? (
+              <SearchEmptyState
+                searchTerm={searchTerm || statusFilter || typeFilter}
+                entityName="payments"
+                onClear={() => {
+                  setSearchTerm('')
+                  setStatusFilter('all')
+                  setTypeFilter('all')
+                }}
+              />
+            ) : (
+              <EmptyState
+                icon="payments"
+                title="No payments recorded"
+                description="Track rent payments, deposits, and other financial transactions. Record your first payment to get started."
+                action={{
+                  label: 'Record Payment',
+                  onClick: () => {},
+                }}
+              />
+            )
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="border-b border-gray-200">
+                <thead className="border-b border-black/[0.08]">
                   <tr>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Payment ID</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Tenant</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Property & Unit</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Type</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Amount</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Method</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Due Date</th>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th className="pb-3 text-right text-sm font-semibold text-gray-900">Actions</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Payment ID</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Tenant</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Property & Unit</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Type</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Amount</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Method</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Due Date</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Status</th>
+                    <th className="pb-3 text-right text-sm font-semibold text-black">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-black/[0.08]">
                   {filteredPayments.map((payment) => (
-                    <tr key={payment.id} className="hover:bg-gray-50">
-                      <td className="py-4 text-sm font-medium text-gray-900">{payment.id}</td>
-                      <td className="py-4 text-sm text-gray-600">{payment.tenant}</td>
+                    <tr key={payment.id} className="hover:bg-black/[0.02] transition-colors duration-100">
+                      <td className="py-4 text-sm font-medium text-black">{payment.id}</td>
+                      <td className="py-4 text-sm text-black/70">{payment.tenant}</td>
                       <td className="py-4">
-                        <div className="text-sm font-medium text-gray-900">{payment.property}</div>
-                        <div className="text-sm text-gray-500">Unit {payment.unit}</div>
+                        <div className="text-sm font-medium text-black">{payment.property}</div>
+                        <div className="text-sm text-black/50">Unit {payment.unit}</div>
                       </td>
                       <td className="py-4">
                         <Badge variant="secondary">{getTypeLabel(payment.type)}</Badge>
                       </td>
-                      <td className="py-4 text-sm font-semibold text-gray-900">
+                      <td className="py-4 text-sm font-semibold text-black">
                         {formatCurrency(payment.amount)}
                       </td>
-                      <td className="py-4 text-sm text-gray-600">{getMethodLabel(payment.method)}</td>
+                      <td className="py-4 text-sm text-black/70">{getMethodLabel(payment.method)}</td>
                       <td className="py-4">
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-black/70">
                           {formatDate(payment.dueDate, { month: 'short', day: 'numeric' })}
                         </div>
                         {payment.date && payment.status === 'completed' && (
@@ -303,7 +324,7 @@ export default function PaymentsPage() {
                         <div className="flex justify-end gap-2">
                           {payment.receiptNumber && (
                             <button
-                              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-900"
+                              className="rounded-lg p-2 text-black/40 hover:bg-black/[0.04] hover:text-black transition-colors duration-150"
                               title="View receipt"
                             >
                               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -313,7 +334,7 @@ export default function PaymentsPage() {
                           )}
                           {payment.status !== 'completed' && (
                             <button
-                              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-success"
+                              className="rounded-lg p-2 text-black/40 hover:bg-emerald-50 hover:text-success transition-colors duration-150"
                               title="Mark as paid"
                             >
                               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">

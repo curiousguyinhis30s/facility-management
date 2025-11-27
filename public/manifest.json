@@ -1,0 +1,50 @@
+{
+  "name": "FacilityPro - Property Management Platform",
+  "short_name": "FacilityPro",
+  "description": "Professional facility management platform for properties, tenants, leases, and operations.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563EB",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "View your property dashboard"
+    },
+    {
+      "name": "Properties",
+      "url": "/properties",
+      "description": "Manage your properties"
+    },
+    {
+      "name": "Tenants",
+      "url": "/tenants",
+      "description": "Manage tenants"
+    },
+    {
+      "name": "Leases",
+      "url": "/leases",
+      "description": "Manage lease agreements"
+    }
+  ]
+}

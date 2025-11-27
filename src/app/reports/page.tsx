@@ -114,8 +114,8 @@ export default function ReportsPage() {
           <div className="grid gap-6 md:grid-cols-4 mb-6">
             <Card>
               <CardContent className="p-6">
-                <div className="text-sm text-gray-500">Total Revenue</div>
-                <div className="mt-2 text-3xl font-semibold text-gray-900">
+                <div className="text-sm text-black/50">Total Revenue</div>
+                <div className="mt-2 text-3xl font-semibold text-black">
                   {formatCurrency(financialData.revenue.total)}
                 </div>
                 <div className="mt-2 text-sm text-success">{financialData.revenue.trend} vs last month</div>
@@ -124,8 +124,8 @@ export default function ReportsPage() {
 
             <Card>
               <CardContent className="p-6">
-                <div className="text-sm text-gray-500">Total Expenses</div>
-                <div className="mt-2 text-3xl font-semibold text-gray-900">
+                <div className="text-sm text-black/50">Total Expenses</div>
+                <div className="mt-2 text-3xl font-semibold text-black">
                   {formatCurrency(financialData.expenses.total)}
                 </div>
                 <div className="mt-2 text-sm text-warning">{financialData.expenses.trend} vs last month</div>
@@ -134,7 +134,7 @@ export default function ReportsPage() {
 
             <Card>
               <CardContent className="p-6">
-                <div className="text-sm text-gray-500">Net Income</div>
+                <div className="text-sm text-black/50">Net Income</div>
                 <div className="mt-2 text-3xl font-semibold text-success">
                   {formatCurrency(financialData.netIncome)}
                 </div>
@@ -146,9 +146,9 @@ export default function ReportsPage() {
 
             <Card>
               <CardContent className="p-6">
-                <div className="text-sm text-gray-500">Occupancy Rate</div>
-                <div className="mt-2 text-3xl font-semibold text-gray-900">{financialData.occupancy.rate}%</div>
-                <div className="mt-2 text-sm text-gray-500">
+                <div className="text-sm text-black/50">Occupancy Rate</div>
+                <div className="mt-2 text-3xl font-semibold text-black">{financialData.occupancy.rate}%</div>
+                <div className="mt-2 text-sm text-black/50">
                   {financialData.occupancy.occupied}/{financialData.occupancy.total} units
                 </div>
               </CardContent>
@@ -165,36 +165,36 @@ export default function ReportsPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">Rent Payments</div>
-                      <div className="text-sm text-gray-500">Regular monthly rent</div>
+                      <div className="font-medium text-black">Rent Payments</div>
+                      <div className="text-sm text-black/50">Regular monthly rent</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold text-gray-900">{formatCurrency(financialData.revenue.rent)}</div>
-                      <div className="text-sm text-gray-500">
+                      <div className="font-semibold text-black">{formatCurrency(financialData.revenue.rent)}</div>
+                      <div className="text-sm text-black/50">
                         {((financialData.revenue.rent / financialData.revenue.total) * 100).toFixed(0)}%
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">Late Fees</div>
-                      <div className="text-sm text-gray-500">Overdue payment penalties</div>
+                      <div className="font-medium text-black">Late Fees</div>
+                      <div className="text-sm text-black/50">Overdue payment penalties</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold text-gray-900">{formatCurrency(financialData.revenue.lateFees)}</div>
-                      <div className="text-sm text-gray-500">
+                      <div className="font-semibold text-black">{formatCurrency(financialData.revenue.lateFees)}</div>
+                      <div className="text-sm text-black/50">
                         {((financialData.revenue.lateFees / financialData.revenue.total) * 100).toFixed(0)}%
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">Security Deposits</div>
-                      <div className="text-sm text-gray-500">New tenant deposits</div>
+                      <div className="font-medium text-black">Security Deposits</div>
+                      <div className="text-sm text-black/50">New tenant deposits</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold text-gray-900">{formatCurrency(financialData.revenue.deposits)}</div>
-                      <div className="text-sm text-gray-500">
+                      <div className="font-semibold text-black">{formatCurrency(financialData.revenue.deposits)}</div>
+                      <div className="text-sm text-black/50">
                         {((financialData.revenue.deposits / financialData.revenue.total) * 100).toFixed(0)}%
                       </div>
                     </div>
@@ -211,36 +211,36 @@ export default function ReportsPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">Maintenance</div>
-                      <div className="text-sm text-gray-500">Repairs and upkeep</div>
+                      <div className="font-medium text-black">Maintenance</div>
+                      <div className="text-sm text-black/50">Repairs and upkeep</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold text-gray-900">{formatCurrency(financialData.expenses.maintenance)}</div>
-                      <div className="text-sm text-gray-500">
+                      <div className="font-semibold text-black">{formatCurrency(financialData.expenses.maintenance)}</div>
+                      <div className="text-sm text-black/50">
                         {((financialData.expenses.maintenance / financialData.expenses.total) * 100).toFixed(0)}%
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">Utilities</div>
-                      <div className="text-sm text-gray-500">Water, electricity, gas</div>
+                      <div className="font-medium text-black">Utilities</div>
+                      <div className="text-sm text-black/50">Water, electricity, gas</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold text-gray-900">{formatCurrency(financialData.expenses.utilities)}</div>
-                      <div className="text-sm text-gray-500">
+                      <div className="font-semibold text-black">{formatCurrency(financialData.expenses.utilities)}</div>
+                      <div className="text-sm text-black/50">
                         {((financialData.expenses.utilities / financialData.expenses.total) * 100).toFixed(0)}%
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-gray-900">Salaries & Wages</div>
-                      <div className="text-sm text-gray-500">Staff compensation</div>
+                      <div className="font-medium text-black">Salaries & Wages</div>
+                      <div className="text-sm text-black/50">Staff compensation</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-semibold text-gray-900">{formatCurrency(financialData.expenses.salaries)}</div>
-                      <div className="text-sm text-gray-500">
+                      <div className="font-semibold text-black">{formatCurrency(financialData.expenses.salaries)}</div>
+                      <div className="text-sm text-black/50">
                         {((financialData.expenses.salaries / financialData.expenses.total) * 100).toFixed(0)}%
                       </div>
                     </div>
@@ -258,26 +258,26 @@ export default function ReportsPage() {
             <CardContent>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="border-b border-gray-200">
+                  <thead className="border-b border-black/[0.08]">
                     <tr>
-                      <th className="pb-3 text-left text-sm font-semibold text-gray-900">Month</th>
-                      <th className="pb-3 text-right text-sm font-semibold text-gray-900">Revenue</th>
-                      <th className="pb-3 text-right text-sm font-semibold text-gray-900">Expenses</th>
-                      <th className="pb-3 text-right text-sm font-semibold text-gray-900">Net Income</th>
-                      <th className="pb-3 text-right text-sm font-semibold text-gray-900">Margin %</th>
+                      <th className="pb-3 text-left text-sm font-semibold text-black">Month</th>
+                      <th className="pb-3 text-right text-sm font-semibold text-black">Revenue</th>
+                      <th className="pb-3 text-right text-sm font-semibold text-black">Expenses</th>
+                      <th className="pb-3 text-right text-sm font-semibold text-black">Net Income</th>
+                      <th className="pb-3 text-right text-sm font-semibold text-black">Margin %</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-black/[0.08]">
                     {monthlyTrends.map((month) => {
                       const netIncome = month.revenue - month.expenses
                       const margin = ((netIncome / month.revenue) * 100).toFixed(1)
                       return (
-                        <tr key={month.month} className="hover:bg-gray-50">
-                          <td className="py-4 text-sm font-medium text-gray-900">{month.month}</td>
-                          <td className="py-4 text-right text-sm text-gray-900">{formatCurrency(month.revenue)}</td>
-                          <td className="py-4 text-right text-sm text-gray-900">{formatCurrency(month.expenses)}</td>
+                        <tr key={month.month} className="hover:bg-black/[0.02] transition-colors duration-100">
+                          <td className="py-4 text-sm font-medium text-black">{month.month}</td>
+                          <td className="py-4 text-right text-sm text-black">{formatCurrency(month.revenue)}</td>
+                          <td className="py-4 text-right text-sm text-black">{formatCurrency(month.expenses)}</td>
                           <td className="py-4 text-right text-sm font-semibold text-success">{formatCurrency(netIncome)}</td>
-                          <td className="py-4 text-right text-sm text-gray-600">{margin}%</td>
+                          <td className="py-4 text-right text-sm text-black/70">{margin}%</td>
                         </tr>
                       )
                     })}
@@ -298,27 +298,27 @@ export default function ReportsPage() {
           <CardContent>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="border-b border-gray-200">
+                <thead className="border-b border-black/[0.08]">
                   <tr>
-                    <th className="pb-3 text-left text-sm font-semibold text-gray-900">Property</th>
-                    <th className="pb-3 text-right text-sm font-semibold text-gray-900">Revenue</th>
-                    <th className="pb-3 text-right text-sm font-semibold text-gray-900">Expenses</th>
-                    <th className="pb-3 text-right text-sm font-semibold text-gray-900">Net Income</th>
-                    <th className="pb-3 text-right text-sm font-semibold text-gray-900">Occupancy</th>
-                    <th className="pb-3 text-right text-sm font-semibold text-gray-900">ROI %</th>
+                    <th className="pb-3 text-left text-sm font-semibold text-black">Property</th>
+                    <th className="pb-3 text-right text-sm font-semibold text-black">Revenue</th>
+                    <th className="pb-3 text-right text-sm font-semibold text-black">Expenses</th>
+                    <th className="pb-3 text-right text-sm font-semibold text-black">Net Income</th>
+                    <th className="pb-3 text-right text-sm font-semibold text-black">Occupancy</th>
+                    <th className="pb-3 text-right text-sm font-semibold text-black">ROI %</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-black/[0.08]">
                   {propertyPerformance.map((property) => {
                     const netIncome = property.revenue - property.expenses
                     return (
-                      <tr key={property.name} className="hover:bg-gray-50">
-                        <td className="py-4 text-sm font-medium text-gray-900">{property.name}</td>
-                        <td className="py-4 text-right text-sm text-gray-900">{formatCurrency(property.revenue)}</td>
-                        <td className="py-4 text-right text-sm text-gray-900">{formatCurrency(property.expenses)}</td>
+                      <tr key={property.name} className="hover:bg-black/[0.02] transition-colors duration-100">
+                        <td className="py-4 text-sm font-medium text-black">{property.name}</td>
+                        <td className="py-4 text-right text-sm text-black">{formatCurrency(property.revenue)}</td>
+                        <td className="py-4 text-right text-sm text-black">{formatCurrency(property.expenses)}</td>
                         <td className="py-4 text-right text-sm font-semibold text-success">{formatCurrency(netIncome)}</td>
-                        <td className="py-4 text-right text-sm text-gray-600">{property.occupancy}%</td>
-                        <td className="py-4 text-right text-sm font-semibold text-gray-900">{property.roi}%</td>
+                        <td className="py-4 text-right text-sm text-black/70">{property.occupancy}%</td>
+                        <td className="py-4 text-right text-sm font-semibold text-black">{property.roi}%</td>
                       </tr>
                     )
                   })}
@@ -334,11 +334,11 @@ export default function ReportsPage() {
         <Card>
           <CardContent className="p-12">
             <div className="flex flex-col items-center justify-center">
-              <svg className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+              <svg className="h-12 w-12 text-black/30" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
               </svg>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900">{reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report</h3>
-              <p className="mt-2 text-sm text-gray-500">This report is under development</p>
+              <h3 className="mt-4 text-lg font-semibold text-black">{reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report</h3>
+              <p className="mt-2 text-sm text-black/50">This report is under development</p>
             </div>
           </CardContent>
         </Card>

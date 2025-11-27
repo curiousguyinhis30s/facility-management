@@ -10,7 +10,7 @@ interface Property {
   id: string
   name: string
   address: string
-  type: 'condo' | 'apartment' | 'warehouse' | 'shoplot' | 'house'
+  type: 'condo' | 'apartment' | 'warehouse' | 'shoplot' | 'house' | 'commercial'
   totalUnits: number
   occupiedUnits: number
   monthlyRevenue: number
@@ -124,15 +124,15 @@ export function PropertyList({ properties, onEdit, onDelete }: PropertyListProps
       </div>
 
       {/* Results Count */}
-      <div className="text-sm text-gray-500">
+      <div className="text-sm text-black/50">
         Showing {sortedProperties.length} of {properties.length} properties
       </div>
 
       {/* Property Grid */}
       {sortedProperties.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12">
+        <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-black/[0.12] p-12">
           <svg
-            className="h-12 w-12 text-gray-400"
+            className="h-12 w-12 text-black/40"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
@@ -144,8 +144,8 @@ export function PropertyList({ properties, onEdit, onDelete }: PropertyListProps
               d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"
             />
           </svg>
-          <h3 className="mt-4 text-lg font-semibold text-gray-900">No properties found</h3>
-          <p className="mt-2 text-sm text-gray-500">
+          <h3 className="mt-4 text-lg font-semibold text-black">No properties found</h3>
+          <p className="mt-2 text-sm text-black/50">
             {searchTerm || typeFilter !== 'all'
               ? 'Try adjusting your search or filters'
               : 'Get started by adding your first property'}
