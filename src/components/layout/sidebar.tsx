@@ -78,6 +78,7 @@ export function Sidebar({ navItems, collapsed = false, onToggle }: SidebarProps)
               <Link
                 key={item.href}
                 href={item.href}
+                scroll={false}
                 className={cn(
                   'group relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-medium',
                   'transition-all duration-150',
