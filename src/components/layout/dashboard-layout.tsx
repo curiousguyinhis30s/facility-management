@@ -1,10 +1,13 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Sidebar } from './sidebar'
 import { Header } from './header'
 import { cn } from '@/lib/utils'
 import { useData } from '@/contexts/DataContext'
+import { useAuth } from '@/contexts/AuthContext'
 
 // Base navigation items (badges will be added dynamically)
 const baseNavigation = [
@@ -17,19 +20,6 @@ const baseNavigation = [
           strokeLinecap="round"
           strokeLinejoin="round"
           d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-        />
-      </svg>
-    ),
-  },
-  {
-    title: 'Canvas',
-    href: '/canvas',
-    icon: (
-      <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"
         />
       </svg>
     ),
@@ -102,19 +92,6 @@ const baseNavigation = [
     ),
   },
   {
-    title: 'Workforce',
-    href: '/workforce',
-    icon: (
-      <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
-        />
-      </svg>
-    ),
-  },
-  {
     title: 'Analytics',
     href: '/analytics',
     icon: (
@@ -147,6 +124,19 @@ const baseNavigation = [
   },
 ]
 
+// Mobile bottom nav items (subset)
+const mobileNavItems = [
+  { title: 'Dashboard', href: '/portal', icon: baseNavigation[0].icon },
+  { title: 'Properties', href: '/properties', icon: baseNavigation[1].icon },
+  { title: 'Tenants', href: '/tenants', icon: baseNavigation[2].icon },
+  { title: 'Maintenance', href: '/maintenance-hub', icon: baseNavigation[4].icon },
+  { title: 'More', href: '#more', icon: (
+    <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+    </svg>
+  )},
+]
+
 interface DashboardLayoutProps {
   children: React.ReactNode
   title: string | React.ReactNode
@@ -155,7 +145,10 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children, title, actions }: DashboardLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const { tenants, workOrders, leases } = useData()
+  const { user, logout } = useAuth()
+  const pathname = usePathname()
 
   // Calculate dynamic badge counts
   const badgeCounts = React.useMemo(() => ({
@@ -181,6 +174,11 @@ export function DashboardLayout({ children, title, actions }: DashboardLayoutPro
     }
   }, [])
 
+  // Close mobile menu on route change
+  React.useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
+
   const toggleSidebar = () => {
     const newValue = !sidebarCollapsed
     setSidebarCollapsed(newValue)
@@ -189,25 +187,176 @@ export function DashboardLayout({ children, title, actions }: DashboardLayoutPro
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      {/* Sidebar */}
-      <Sidebar
-        navItems={navigation}
-        collapsed={sidebarCollapsed}
-        onToggle={toggleSidebar}
-      />
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block">
+        <Sidebar
+          navItems={navigation}
+          collapsed={sidebarCollapsed}
+          onToggle={toggleSidebar}
+        />
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Sidebar Drawer */}
+      <div className={cn(
+        'fixed left-0 top-0 h-full w-72 bg-white z-50 transform transition-transform duration-300 ease-out md:hidden',
+        mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+      )}>
+        {/* Mobile Menu Header */}
+        <div className="flex items-center justify-between h-14 px-4 border-b border-black/[0.06]">
+          <Link href="/portal" className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-slate-900 flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+              </svg>
+            </div>
+            <span className="text-sm font-semibold text-slate-900">FacilityPro</span>
+          </Link>
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-2 -mr-2 text-slate-500 hover:text-slate-700"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Nav Items */}
+        <nav className="p-3 overflow-y-auto h-[calc(100%-8rem)]">
+          <div className="space-y-1">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                    isActive
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  )}
+                >
+                  <span className="h-5 w-5">{item.icon}</span>
+                  <span className="flex-1">{item.title}</span>
+                  {item.badge && Number(item.badge) > 0 && (
+                    <span className={cn(
+                      'text-[10px] font-semibold px-1.5 py-0.5 rounded-full',
+                      isActive ? 'bg-primary/20 text-primary' : 'bg-slate-200 text-slate-600'
+                    )}>
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              )
+            })}
+          </div>
+        </nav>
+
+        {/* Mobile User Section */}
+        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-black/[0.06] bg-white">
+          <div className="flex items-center gap-3 px-2 py-2">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-xs font-semibold text-white">
+              {user?.name?.charAt(0) || 'U'}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-slate-900 truncate">{user?.name || 'User'}</p>
+              <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+            </div>
+            <button
+              onClick={logout}
+              className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+              title="Logout"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content */}
       <div
         className={cn(
           'flex flex-1 flex-col overflow-hidden transition-[margin] duration-200 ease-out',
-          sidebarCollapsed ? 'ml-16' : 'ml-56'
+          'md:ml-56',
+          sidebarCollapsed && 'md:ml-16'
         )}
       >
-        {/* Header */}
-        <Header title={title} actions={actions} />
+        {/* Mobile Header */}
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between bg-white/95 backdrop-blur-md border-b border-black/[0.06] px-4 md:hidden">
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="p-2 -ml-2 text-slate-600 hover:text-slate-900"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+          <Link href="/portal" className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-slate-900 flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+              </svg>
+            </div>
+          </Link>
+          <div className="w-9" /> {/* Spacer for centering */}
+        </header>
+
+        {/* Desktop Header */}
+        <div className="hidden md:block">
+          <Header title={title} actions={actions} />
+        </div>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6">{children}</main>
+
+        {/* Mobile Bottom Navigation */}
+        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-black/[0.08] px-2 py-1.5 md:hidden z-30">
+          <div className="flex items-center justify-around">
+            {mobileNavItems.map((item) => {
+              const isActive = pathname === item.href || (item.href !== '#more' && pathname.startsWith(item.href + '/'))
+              const isMore = item.href === '#more'
+
+              if (isMore) {
+                return (
+                  <button
+                    key={item.href}
+                    onClick={() => setMobileMenuOpen(true)}
+                    className="flex flex-col items-center gap-0.5 px-3 py-1.5 text-slate-400"
+                  >
+                    <span className="h-5 w-5">{item.icon}</span>
+                    <span className="text-[10px] font-medium">{item.title}</span>
+                  </button>
+                )
+              }
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'flex flex-col items-center gap-0.5 px-3 py-1.5 transition-colors',
+                    isActive ? 'text-primary' : 'text-slate-400'
+                  )}
+                >
+                  <span className="h-5 w-5">{item.icon}</span>
+                  <span className="text-[10px] font-medium">{item.title}</span>
+                </Link>
+              )
+            })}
+          </div>
+        </nav>
       </div>
     </div>
   )
