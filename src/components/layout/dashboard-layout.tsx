@@ -10,7 +10,7 @@ import { useData } from '@/contexts/DataContext'
 const baseNavigation = [
   {
     title: 'Dashboard',
-    href: '/',
+    href: '/portal',
     icon: (
       <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
         <path
