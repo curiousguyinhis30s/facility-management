@@ -271,7 +271,7 @@ export default function LandingPage() {
                   {[
                     { label: 'Properties', value: '12', trend: '+2' },
                     { label: 'Occupancy', value: '94%', trend: '+3%' },
-                    { label: 'Revenue', value: 'SAR 182K', trend: '+12%' },
+                    { label: 'Revenue', value: '$182K', trend: '+12%' },
                     { label: 'Tenants', value: '156', trend: '+8' },
                   ].map((stat, i) => (
                     <div
@@ -333,28 +333,30 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Mobile Dashboard Preview - Simplified */}
-          <div className={`mt-8 sm:hidden transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { label: 'Properties', value: '12', icon: '🏢' },
-                { label: 'Occupancy', value: '94%', icon: '📊' },
-                { label: 'Revenue', value: 'SAR 182K', icon: '💰' },
-                { label: 'Tenants', value: '156', icon: '👥' },
-              ].map((stat, i) => (
-                <div key={i} className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
-                  <div className="text-lg mb-1">{stat.icon}</div>
-                  <div className="text-lg font-semibold text-slate-900">{stat.value}</div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wide">{stat.label}</div>
-                </div>
-              ))}
+          {/* Mobile Quick Stats - Minimal thin row */}
+          <div className={`mt-6 sm:hidden transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+            <div className="flex items-center justify-center gap-6 py-3 px-4 bg-slate-50/80 rounded-xl">
+              <div className="text-center">
+                <div className="text-lg font-bold text-slate-900">12</div>
+                <div className="text-[10px] text-slate-500 uppercase">Properties</div>
+              </div>
+              <div className="w-px h-8 bg-slate-200" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-slate-900">94%</div>
+                <div className="text-[10px] text-slate-500 uppercase">Occupancy</div>
+              </div>
+              <div className="w-px h-8 bg-slate-200" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-slate-900">156</div>
+                <div className="text-[10px] text-slate-500 uppercase">Tenants</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats - Modern Animated Section */}
-      <section ref={statsRef.ref} className="py-16 sm:py-24 px-4 sm:px-6 relative overflow-hidden">
+      {/* Stats - Modern Animated Section - Desktop only */}
+      <section ref={statsRef.ref} className="hidden sm:block py-16 sm:py-24 px-4 sm:px-6 relative overflow-hidden">
         {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-50/50" />
         <div className="absolute inset-0 pointer-events-none">

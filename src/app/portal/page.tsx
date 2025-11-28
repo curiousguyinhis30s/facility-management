@@ -289,8 +289,32 @@ export default function PortalDashboard() {
       {/* Main Dashboard for Users with Data */}
       {hasData && (
         <>
-          {/* Key Metrics Row - Improved Mobile Layout */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          {/* Key Metrics - Minimal thin row on mobile, cards on desktop */}
+          {/* Mobile: Thin horizontal stats */}
+          <div className="flex items-center gap-4 py-3 px-1 mb-4 border-b border-black/[0.06] md:hidden overflow-x-auto">
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <span className="text-lg font-bold text-black">{properties.length}</span>
+              <span className="text-xs text-black/50">Properties</span>
+            </div>
+            <div className="w-px h-4 bg-black/10" />
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <span className="text-lg font-bold text-black">{stats.occupancyRate}%</span>
+              <span className="text-xs text-black/50">Occupied</span>
+            </div>
+            <div className="w-px h-4 bg-black/10" />
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <span className="text-lg font-bold text-black">{formatAmount(stats.monthlyRevenue)}</span>
+              <span className="text-xs text-black/50">Revenue</span>
+            </div>
+            <div className="w-px h-4 bg-black/10" />
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <span className="text-lg font-bold text-black">{tenants.filter(t => t.status === 'active').length}</span>
+              <span className="text-xs text-black/50">Tenants</span>
+            </div>
+          </div>
+
+          {/* Desktop: Card grid */}
+          <div className="hidden md:grid grid-cols-4 gap-3 mb-6">
             {[
               {
                 label: 'Properties',
@@ -322,18 +346,18 @@ export default function PortalDashboard() {
               }
             ].map((stat, i) => (
               <Card key={i} className="border-slate-100 hover:shadow-md transition-shadow">
-                <CardContent className="p-3 sm:p-4">
+                <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg ${stat.color} flex items-center justify-center`}>
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                    <div className={`w-9 h-9 rounded-lg ${stat.color} flex items-center justify-center`}>
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d={stat.icon} />
                       </svg>
                     </div>
                   </div>
-                  <div className="text-xl sm:text-2xl font-bold text-black tracking-tight">{stat.value}</div>
+                  <div className="text-2xl font-bold text-black tracking-tight">{stat.value}</div>
                   <div className="flex items-center justify-between mt-1">
-                    <span className="text-[10px] sm:text-xs font-medium text-slate-500 uppercase tracking-wide">{stat.label}</span>
-                    <span className="text-[10px] text-black/40 hidden sm:inline">{stat.sub}</span>
+                    <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">{stat.label}</span>
+                    <span className="text-[10px] text-black/40">{stat.sub}</span>
                   </div>
                 </CardContent>
               </Card>
