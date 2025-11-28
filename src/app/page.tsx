@@ -147,9 +147,17 @@ export default function LandingPage() {
             </button>
           </div>
 
+          {/* Mobile Menu Backdrop */}
+          {mobileMenuOpen && (
+            <div
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm sm:hidden z-40"
+              onClick={() => setMobileMenuOpen(false)}
+            />
+          )}
+
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="sm:hidden pb-4 border-t border-slate-100 mt-2 pt-4 bg-white/95 backdrop-blur-xl rounded-b-2xl">
+            <div className="sm:hidden pb-4 border-t border-slate-100 mt-2 pt-4 bg-white/95 backdrop-blur-xl rounded-b-2xl relative z-50">
               <div className="flex flex-col gap-2">
                 {['Features', 'About'].map((item) => (
                   <a
@@ -196,7 +204,7 @@ export default function LandingPage() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 mb-4 sm:mb-6 transition-all duration-500 hover:bg-slate-200">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] sm:text-[11px] font-medium text-slate-600 tracking-wide">Built for Saudi Arabia</span>
+              <span className="text-[10px] sm:text-[11px] font-medium text-slate-600 tracking-wide">Property Management Made Simple</span>
             </div>
 
             <h1 className="text-3xl sm:text-[42px] md:text-[56px] font-semibold text-slate-900 tracking-tight leading-[1.1] mb-4 sm:mb-5">
@@ -345,20 +353,64 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section ref={statsRef.ref} className="py-10 sm:py-16 px-4 sm:px-6 border-y border-slate-100 bg-slate-50/30">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-3 gap-4 sm:gap-12">
+      {/* Stats - Modern Animated Section */}
+      <section ref={statsRef.ref} className="py-16 sm:py-24 px-4 sm:px-6 relative overflow-hidden">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-50/50" />
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-blue-100/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-emerald-100/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
+        </div>
+
+        <div className="max-w-5xl mx-auto relative">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
             {[
-              { value: properties, suffix: '+', label: 'Properties' },
-              { value: tenants, suffix: '+', label: 'Tenants' },
-              { value: uptime, suffix: '.9%', label: 'Uptime' },
+              { value: properties, suffix: '+', label: 'Properties Managed', icon: '🏢', color: 'from-blue-500 to-blue-600' },
+              { value: tenants, suffix: '+', label: 'Happy Tenants', icon: '👥', color: 'from-emerald-500 to-emerald-600' },
+              { value: uptime, suffix: '.9%', label: 'System Uptime', icon: '⚡', color: 'from-violet-500 to-violet-600' },
             ].map((stat, i) => (
-              <div key={i} className="text-center group">
-                <div className="text-2xl sm:text-4xl font-semibold text-slate-900 tracking-tight transition-transform duration-300 group-hover:scale-105">
-                  {stat.value}{stat.suffix}
+              <div
+                key={i}
+                className={`group relative transition-all duration-700 ease-out ${
+                  statsRef.inView
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-8'
+                }`}
+                style={{ transitionDelay: `${i * 150}ms` }}
+              >
+                {/* Card */}
+                <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-slate-200/60 p-6 sm:p-8 shadow-lg shadow-slate-100/50 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 hover:-translate-y-1">
+                  {/* Gradient accent bar */}
+                  <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1 rounded-full bg-gradient-to-r ${stat.color} opacity-80`} />
+
+                  {/* Icon with animated background */}
+                  <div className="flex justify-center mb-4">
+                    <div className="relative">
+                      <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-xl blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500`} />
+                      <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 flex items-center justify-center text-xl">
+                        {stat.icon}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Number with spring animation */}
+                  <div className="text-center">
+                    <div className="relative inline-block">
+                      <span className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 bg-clip-text text-transparent tracking-tight">
+                        {stat.value}
+                      </span>
+                      <span className="text-2xl sm:text-3xl font-bold text-slate-400 ml-0.5">
+                        {stat.suffix}
+                      </span>
+                    </div>
+                    <div className="text-sm text-slate-500 mt-2 font-medium">{stat.label}</div>
+                  </div>
+
+                  {/* Decorative corner */}
+                  <div className="absolute bottom-0 right-0 w-16 h-16 overflow-hidden rounded-br-2xl sm:rounded-br-3xl opacity-50">
+                    <div className={`absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl ${stat.color} opacity-5 rounded-full -translate-x-8 translate-y-8`} />
+                  </div>
                 </div>
-                <div className="text-[10px] sm:text-sm text-slate-500 mt-0.5 sm:mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -430,16 +482,16 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-16 items-center">
             <div>
               <span className="text-[10px] sm:text-[11px] font-medium text-slate-400 uppercase tracking-widest">Why FacilityPro</span>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 mt-2 sm:mt-3 mb-4 sm:mb-5">Built for the Saudi market</h2>
+              <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 mt-2 sm:mt-3 mb-4 sm:mb-5">Built for modern property managers</h2>
               <p className="text-sm sm:text-base text-slate-500 leading-relaxed mb-6 sm:mb-8">
-                We understand the unique needs of property managers in Saudi Arabia. From SAR currency support to local compliance, FacilityPro is designed for the region.
+                We understand the unique needs of property managers everywhere. From multi-currency support to local compliance, FacilityPro adapts to your region.
               </p>
 
               <div className="space-y-3 sm:space-y-4">
                 {[
-                  { title: 'SAR Currency Support', desc: 'Native Saudi Riyal formatting' },
-                  { title: 'Arabic Interface', desc: 'Full RTL support' },
-                  { title: 'Local Compliance', desc: 'Saudi rental regulation templates' },
+                  { title: 'Multi-Currency Support', desc: 'Support for all major currencies' },
+                  { title: 'Localized Interface', desc: 'Works in your language' },
+                  { title: 'Compliance Ready', desc: 'Meets regional requirements' },
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-3 group">
                     <div className="w-5 h-5 rounded-full bg-slate-900 flex items-center justify-center flex-shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110">
@@ -500,7 +552,7 @@ export default function LandingPage() {
             <div className="relative">
               <h2 className="text-xl sm:text-3xl font-semibold text-white mb-2 sm:mb-3">Ready to get started?</h2>
               <p className="text-sm sm:text-base text-slate-400 mb-6 sm:mb-8 max-w-md mx-auto">
-                Join property managers across Saudi Arabia who trust FacilityPro.
+                Join thousands of property managers who trust FacilityPro.
               </p>
               <Link href={isAuthenticated ? '/portal' : '/login'}>
                 <Button className="bg-white text-slate-900 hover:bg-slate-100 h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-[14px] rounded-full transition-all duration-300 hover:shadow-xl group">

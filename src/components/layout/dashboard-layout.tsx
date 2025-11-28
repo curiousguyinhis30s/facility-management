@@ -196,10 +196,10 @@ export function DashboardLayout({ children, title, actions }: DashboardLayoutPro
         />
       </div>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile Sidebar Overlay with Blur */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden transition-all duration-300"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -293,24 +293,18 @@ export function DashboardLayout({ children, title, actions }: DashboardLayoutPro
           sidebarCollapsed && 'md:ml-16'
         )}
       >
-        {/* Mobile Header */}
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between bg-white/95 backdrop-blur-md border-b border-black/[0.06] px-4 md:hidden">
-          <button
-            onClick={() => setMobileMenuOpen(true)}
-            className="p-2 -ml-2 text-slate-600 hover:text-slate-900"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          </button>
-          <Link href="/portal" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-slate-900 flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
-              </svg>
-            </div>
-          </Link>
-          <div className="w-9" /> {/* Spacer for centering */}
+        {/* Mobile Page Title Header - Clean minimal design */}
+        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-black/[0.04] px-4 py-3 md:hidden">
+          <div className="flex items-center justify-between">
+            <h1 className="text-lg font-semibold text-slate-900 truncate">
+              {typeof title === 'string' ? title : 'Dashboard'}
+            </h1>
+            {actions && (
+              <div className="flex items-center gap-2 flex-shrink-0 ml-3">
+                {actions}
+              </div>
+            )}
+          </div>
         </header>
 
         {/* Desktop Header */}

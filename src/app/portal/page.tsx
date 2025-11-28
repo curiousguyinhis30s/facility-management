@@ -216,15 +216,21 @@ export default function PortalDashboard() {
   const hasData = properties.length > 0 || tenants.length > 0
 
   return (
-    <DashboardLayout title="">
+    <DashboardLayout title="Dashboard">
       {/* Hero Section */}
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-black">
+        <h1 className="text-xl font-semibold text-black hidden md:block">
           {getGreeting()}{user?.name ? `, ${user.name.split(' ')[0]}` : ''}
         </h1>
-        <p className="text-sm text-black/50 mt-0.5">
+        <p className="text-sm text-black/50 mt-0.5 hidden md:block">
           {hasData
             ? `Overview of your ${properties.length} ${properties.length === 1 ? 'property' : 'properties'}`
+            : 'Welcome to FacilityPro'}
+        </p>
+        {/* Mobile greeting */}
+        <p className="text-sm text-black/50 md:hidden">
+          {hasData
+            ? `${properties.length} properties • ${tenants.length} tenants`
             : 'Welcome to FacilityPro'}
         </p>
       </div>
@@ -283,67 +289,55 @@ export default function PortalDashboard() {
       {/* Main Dashboard for Users with Data */}
       {hasData && (
         <>
-          {/* Key Metrics Row */}
+          {/* Key Metrics Row - Improved Mobile Layout */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-            <Card className="border-slate-100">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Properties</span>
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center">
-                    <svg className="w-3 h-3 text-slate-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
-                    </svg>
+            {[
+              {
+                label: 'Properties',
+                value: properties.length,
+                sub: `${stats.totalUnits} units`,
+                icon: 'M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21',
+                color: 'bg-blue-50 text-blue-600'
+              },
+              {
+                label: 'Occupancy',
+                value: `${stats.occupancyRate}%`,
+                sub: `${stats.occupiedUnits}/${stats.totalUnits}`,
+                icon: 'M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941',
+                color: stats.occupancyRate >= 80 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+              },
+              {
+                label: 'Revenue',
+                value: formatAmount(stats.monthlyRevenue),
+                sub: 'Monthly',
+                icon: 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+                color: 'bg-violet-50 text-violet-600'
+              },
+              {
+                label: 'Tenants',
+                value: tenants.length,
+                sub: `${tenants.filter(t => t.status === 'active').length} active`,
+                icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z',
+                color: 'bg-slate-100 text-slate-600'
+              }
+            ].map((stat, i) => (
+              <Card key={i} className="border-slate-100 hover:shadow-md transition-shadow">
+                <CardContent className="p-3 sm:p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg ${stat.color} flex items-center justify-center`}>
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d={stat.icon} />
+                      </svg>
+                    </div>
                   </div>
-                </div>
-                <div className="text-2xl font-semibold text-black">{properties.length}</div>
-                <div className="text-[10px] text-black/40">{stats.totalUnits} units</div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-slate-100">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Occupancy</span>
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center">
-                    <svg className="w-3 h-3 text-slate-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-                    </svg>
+                  <div className="text-xl sm:text-2xl font-bold text-black tracking-tight">{stat.value}</div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-[10px] sm:text-xs font-medium text-slate-500 uppercase tracking-wide">{stat.label}</span>
+                    <span className="text-[10px] text-black/40 hidden sm:inline">{stat.sub}</span>
                   </div>
-                </div>
-                <div className="text-2xl font-semibold text-black">{stats.occupancyRate}%</div>
-                <div className="text-[10px] text-black/40">{stats.occupiedUnits}/{stats.totalUnits} occupied</div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-slate-100">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Revenue</span>
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center">
-                    <svg className="w-3 h-3 text-slate-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="text-2xl font-semibold text-black">{formatAmount(stats.monthlyRevenue)}</div>
-                <div className="text-[10px] text-black/40">Monthly</div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-slate-100">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Tenants</span>
-                  <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center">
-                    <svg className="w-3 h-3 text-slate-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="text-2xl font-semibold text-black">{tenants.length}</div>
-                <div className="text-[10px] text-black/40">{tenants.filter(t => t.status === 'active').length} active</div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           {/* Attention Items */}
