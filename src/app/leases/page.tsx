@@ -245,8 +245,28 @@ export default function LeasesPage() {
         </div>
       }
     >
-      {/* Compact Stats Row */}
-      <div className="flex flex-wrap items-center gap-6 mb-4 pb-4 border-b border-black/[0.06]">
+      {/* Mobile Stats - Compact grid */}
+      <div className="grid grid-cols-4 gap-2 mb-4 pb-4 border-b border-black/[0.06] md:hidden">
+        <div className="text-center">
+          <div className="text-lg font-bold">{leases.length}</div>
+          <div className="text-[10px] text-black/50">Total</div>
+        </div>
+        <div className="text-center">
+          <div className="text-lg font-bold text-green-600">{stats.active}</div>
+          <div className="text-[10px] text-black/50">Active</div>
+        </div>
+        <div className="text-center">
+          <div className="text-lg font-bold text-amber-600">{stats.expiring}</div>
+          <div className="text-[10px] text-black/50">Expiring</div>
+        </div>
+        <div className="text-center">
+          <div className="text-lg font-bold text-red-600">{stats.expired}</div>
+          <div className="text-[10px] text-black/50">Expired</div>
+        </div>
+      </div>
+
+      {/* Desktop Stats Row */}
+      <div className="hidden md:flex flex-wrap items-center gap-6 mb-4 pb-4 border-b border-black/[0.06]">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
             <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -258,9 +278,7 @@ export default function LeasesPage() {
             <div className="text-[11px] text-black/50">Total Leases</div>
           </div>
         </div>
-
         <div className="w-px h-8 bg-black/10" />
-
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
             <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -272,9 +290,7 @@ export default function LeasesPage() {
             <div className="text-[11px] text-black/50">Active</div>
           </div>
         </div>
-
         <div className="w-px h-8 bg-black/10" />
-
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
             <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -286,23 +302,7 @@ export default function LeasesPage() {
             <div className="text-[11px] text-black/50">Expiring</div>
           </div>
         </div>
-
         <div className="w-px h-8 bg-black/10" />
-
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
-            <svg className="w-4 h-4 text-red-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-            </svg>
-          </div>
-          <div>
-            <div className="text-xl font-semibold text-red-600">{stats.expired}</div>
-            <div className="text-[11px] text-black/50">Expired</div>
-          </div>
-        </div>
-
-        <div className="w-px h-8 bg-black/10" />
-
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
             <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -316,8 +316,35 @@ export default function LeasesPage() {
         </div>
       </div>
 
-      {/* Filters - Compact inline */}
-      <div className="flex items-center gap-3 mb-4 px-3 py-2 bg-black/[0.02] rounded-lg border border-black/[0.06]">
+      {/* Mobile Filters */}
+      <div className="flex flex-col gap-2 mb-4 md:hidden">
+        <Input
+          type="search"
+          placeholder="Search leases..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="h-9 text-sm"
+        />
+        <div className="flex gap-2">
+          <Select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            options={[
+              { value: 'all', label: 'All' },
+              { value: 'active', label: 'Active' },
+              { value: 'expiring', label: 'Expiring' },
+              { value: 'expired', label: 'Expired' },
+            ]}
+            className="flex-1 h-9 text-sm"
+          />
+          <span className="flex items-center text-xs text-black/50 px-2">
+            {filteredLeases.length} results
+          </span>
+        </div>
+      </div>
+
+      {/* Desktop Filters */}
+      <div className="hidden md:flex items-center gap-3 mb-4 px-3 py-2 bg-black/[0.02] rounded-lg border border-black/[0.06]">
         <Input
           type="search"
           placeholder="Search leases..."
@@ -325,7 +352,6 @@ export default function LeasesPage() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-52 h-8 text-sm"
         />
-
         <Select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
@@ -337,14 +363,68 @@ export default function LeasesPage() {
           ]}
           className="w-36 h-8 text-sm"
         />
-
         <span className="ml-auto text-xs text-black/50 whitespace-nowrap">
           {filteredLeases.length} of {leases.length}
         </span>
       </div>
 
-      {/* Leases List */}
-      <Card>
+      {/* Mobile Card View */}
+      <div className="space-y-3 md:hidden">
+        {filteredLeases.length === 0 ? (
+          <Card>
+            <CardContent className="p-6">
+              {searchTerm || statusFilter !== 'all' ? (
+                <SearchEmptyState
+                  searchTerm={searchTerm || statusFilter}
+                  entityName="leases"
+                  onClear={() => { setSearchTerm(''); setStatusFilter('all') }}
+                />
+              ) : (
+                <EmptyState icon="leases" title="No leases yet" description="Create a lease to track agreements." action={{ label: 'Create Lease', onClick: handleAddLease }} />
+              )}
+            </CardContent>
+          </Card>
+        ) : (
+          filteredLeases.map((lease) => {
+            const daysUntilExpiry = getDaysUntilExpiry(lease.endDate)
+            return (
+              <Card key={lease.id} className="overflow-hidden">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <div className="font-medium text-black">{lease.tenant}</div>
+                      <div className="text-xs text-black/50">{lease.property} • Unit {lease.unit}</div>
+                    </div>
+                    <Badge variant={lease.status === 'active' ? 'success' : lease.status === 'expiring' ? 'warning' : 'danger'}>
+                      {lease.status}
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 text-sm mb-3">
+                    <div>
+                      <div className="text-[10px] text-black/40 uppercase">Rent</div>
+                      <div className="font-medium">{formatCurrency(lease.monthlyRent)}/mo</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-black/40 uppercase">Term</div>
+                      <div className="text-xs">{formatDate(lease.startDate, { month: 'short', year: '2-digit' })} - {formatDate(lease.endDate, { month: 'short', year: '2-digit' })}</div>
+                    </div>
+                  </div>
+                  {lease.status === 'expiring' && (
+                    <div className="text-xs text-amber-600 mb-3">{daysUntilExpiry} days remaining</div>
+                  )}
+                  <div className="flex gap-2 pt-2 border-t border-black/[0.06]">
+                    <button onClick={() => handleEditLease(lease)} className="flex-1 text-xs text-primary py-1.5 hover:bg-primary/5 rounded">Edit</button>
+                    <button onClick={() => handleDeleteLease(lease.id)} className="flex-1 text-xs text-red-600 py-1.5 hover:bg-red-50 rounded">Delete</button>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })
+        )}
+      </div>
+
+      {/* Desktop Table View */}
+      <Card className="hidden md:block">
         <CardContent className="p-6">
           {filteredLeases.length === 0 ? (
             searchTerm || statusFilter !== 'all' ? (

@@ -143,8 +143,20 @@ export default function PaymentsPage() {
         </Button>
       }
     >
-      {/* Compact Stats Row */}
-      <div className="flex flex-wrap items-center gap-6 mb-4 pb-4 border-b border-black/[0.06]">
+      {/* Mobile Stats */}
+      <div className="grid grid-cols-2 gap-3 mb-4 pb-4 border-b border-black/[0.06] md:hidden">
+        <div className="bg-green-50 rounded-lg p-3 text-center">
+          <div className="text-lg font-bold text-green-600">{formatCurrency(stats.totalCollected)}</div>
+          <div className="text-[10px] text-green-700/60">Collected</div>
+        </div>
+        <div className="bg-amber-50 rounded-lg p-3 text-center">
+          <div className="text-lg font-bold text-amber-600">{formatCurrency(stats.pending)}</div>
+          <div className="text-[10px] text-amber-700/60">Pending</div>
+        </div>
+      </div>
+
+      {/* Desktop Stats Row */}
+      <div className="hidden md:flex flex-wrap items-center gap-6 mb-4 pb-4 border-b border-black/[0.06]">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
             <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -156,23 +168,7 @@ export default function PaymentsPage() {
             <div className="text-[11px] text-black/50">Total Collected</div>
           </div>
         </div>
-
         <div className="w-px h-8 bg-black/10" />
-
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-            <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-            </svg>
-          </div>
-          <div>
-            <div className="text-xl font-semibold text-blue-600">{formatCurrency(stats.thisMonth)}</div>
-            <div className="text-[11px] text-black/50">This Month</div>
-          </div>
-        </div>
-
-        <div className="w-px h-8 bg-black/10" />
-
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
             <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -184,9 +180,7 @@ export default function PaymentsPage() {
             <div className="text-[11px] text-black/50">Pending</div>
           </div>
         </div>
-
         <div className="w-px h-8 bg-black/10" />
-
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
             <svg className="w-4 h-4 text-red-600" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -200,48 +194,57 @@ export default function PaymentsPage() {
         </div>
       </div>
 
-      {/* Filters - Compact inline */}
-      <div className="flex items-center gap-3 mb-4 px-3 py-2 bg-black/[0.02] rounded-lg border border-black/[0.06]">
-        <Input
-          type="search"
-          placeholder="Search payments..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-52 h-8 text-sm"
-        />
-
-        <Select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          options={[
-            { value: 'all', label: 'All Statuses' },
-            { value: 'completed', label: 'Completed' },
-            { value: 'pending', label: 'Pending' },
-            { value: 'overdue', label: 'Overdue' },
-          ]}
-          className="w-32 h-8 text-sm"
-        />
-
-        <Select
-          value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
-          options={[
-            { value: 'all', label: 'All Types' },
-            { value: 'rent', label: 'Rent' },
-            { value: 'late_fee', label: 'Late Fee' },
-            { value: 'security_deposit', label: 'Deposit' },
-            { value: 'maintenance', label: 'Maintenance' },
-          ]}
-          className="w-32 h-8 text-sm"
-        />
-
-        <span className="ml-auto text-xs text-black/50 whitespace-nowrap">
-          {filteredPayments.length} of {payments.length}
-        </span>
+      {/* Mobile Filters */}
+      <div className="flex flex-col gap-2 mb-4 md:hidden">
+        <Input type="search" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="h-9 text-sm" />
+        <div className="flex gap-2">
+          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} options={[{ value: 'all', label: 'Status' }, { value: 'completed', label: 'Paid' }, { value: 'pending', label: 'Pending' }, { value: 'overdue', label: 'Overdue' }]} className="flex-1 h-9 text-sm" />
+          <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} options={[{ value: 'all', label: 'Type' }, { value: 'rent', label: 'Rent' }, { value: 'late_fee', label: 'Fee' }, { value: 'security_deposit', label: 'Deposit' }]} className="flex-1 h-9 text-sm" />
+        </div>
       </div>
 
-      {/* Payments List */}
-      <Card>
+      {/* Desktop Filters */}
+      <div className="hidden md:flex items-center gap-3 mb-4 px-3 py-2 bg-black/[0.02] rounded-lg border border-black/[0.06]">
+        <Input type="search" placeholder="Search payments..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-52 h-8 text-sm" />
+        <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} options={[{ value: 'all', label: 'All Statuses' }, { value: 'completed', label: 'Completed' }, { value: 'pending', label: 'Pending' }, { value: 'overdue', label: 'Overdue' }]} className="w-32 h-8 text-sm" />
+        <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} options={[{ value: 'all', label: 'All Types' }, { value: 'rent', label: 'Rent' }, { value: 'late_fee', label: 'Late Fee' }, { value: 'security_deposit', label: 'Deposit' }, { value: 'maintenance', label: 'Maintenance' }]} className="w-32 h-8 text-sm" />
+        <span className="ml-auto text-xs text-black/50 whitespace-nowrap">{filteredPayments.length} of {payments.length}</span>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="space-y-3 md:hidden">
+        {filteredPayments.length === 0 ? (
+          <Card><CardContent className="p-6 text-center text-sm text-black/50">No payments found</CardContent></Card>
+        ) : (
+          filteredPayments.map((payment) => (
+            <Card key={payment.id}>
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <div className="font-medium text-black">{payment.tenant}</div>
+                    <div className="text-xs text-black/50">{payment.property} • {payment.unit}</div>
+                  </div>
+                  <Badge variant={payment.status === 'completed' ? 'success' : payment.status === 'pending' ? 'warning' : 'danger'}>
+                    {payment.status}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-black/[0.06]">
+                  <div>
+                    <div className="text-lg font-bold">{formatCurrency(payment.amount)}</div>
+                    <div className="text-[10px] text-black/40">{getTypeLabel(payment.type)}</div>
+                  </div>
+                  <div className="text-right text-xs text-black/50">
+                    Due {formatDate(payment.dueDate, { month: 'short', day: 'numeric' })}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-6">
           {filteredPayments.length === 0 ? (
             searchTerm || statusFilter !== 'all' || typeFilter !== 'all' ? (

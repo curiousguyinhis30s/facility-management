@@ -122,80 +122,82 @@ export default function MaintenancePage() {
         </Button>
       }
     >
-      {/* Stats */}
-      <div className="grid gap-6 md:grid-cols-4 mb-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-black/50">Total Tasks</div>
-            <div className="mt-2 text-3xl font-semibold text-black">{stats.total}</div>
-            <div className="mt-2 text-sm text-black/50">Scheduled</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-black/50">Upcoming</div>
-            <div className="mt-2 text-3xl font-semibold text-primary">{stats.upcoming}</div>
-            <div className="mt-2 text-sm text-black/50">In next 30 days</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-black/50">Overdue</div>
-            <div className="mt-2 text-3xl font-semibold text-danger">{stats.overdue}</div>
-            <div className="mt-2 text-sm text-danger">Needs attention</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-sm text-black/50">Scheduled</div>
-            <div className="mt-2 text-3xl font-semibold text-success">{stats.scheduled}</div>
-            <div className="mt-2 text-sm text-success">On track</div>
-          </CardContent>
-        </Card>
+      {/* Mobile Stats */}
+      <div className="grid grid-cols-3 gap-2 mb-4 md:hidden">
+        <div className="bg-slate-50 rounded-lg p-3 text-center">
+          <div className="text-xl font-bold">{stats.total}</div>
+          <div className="text-[10px] text-black/50">Total</div>
+        </div>
+        <div className="bg-amber-50 rounded-lg p-3 text-center">
+          <div className="text-xl font-bold text-amber-600">{stats.upcoming}</div>
+          <div className="text-[10px] text-amber-700/60">Upcoming</div>
+        </div>
+        <div className="bg-red-50 rounded-lg p-3 text-center">
+          <div className="text-xl font-bold text-red-600">{stats.overdue}</div>
+          <div className="text-[10px] text-red-700/60">Overdue</div>
+        </div>
       </div>
 
-      {/* Filters */}
-      <Card className="mb-6">
+      {/* Desktop Stats */}
+      <div className="hidden md:grid gap-6 md:grid-cols-4 mb-6">
+        <Card><CardContent className="p-6"><div className="text-sm text-black/50">Total Tasks</div><div className="mt-2 text-3xl font-semibold text-black">{stats.total}</div></CardContent></Card>
+        <Card><CardContent className="p-6"><div className="text-sm text-black/50">Upcoming</div><div className="mt-2 text-3xl font-semibold text-primary">{stats.upcoming}</div></CardContent></Card>
+        <Card><CardContent className="p-6"><div className="text-sm text-black/50">Overdue</div><div className="mt-2 text-3xl font-semibold text-danger">{stats.overdue}</div></CardContent></Card>
+        <Card><CardContent className="p-6"><div className="text-sm text-black/50">Scheduled</div><div className="mt-2 text-3xl font-semibold text-success">{stats.scheduled}</div></CardContent></Card>
+      </div>
+
+      {/* Mobile Filters */}
+      <div className="flex gap-2 mb-4 md:hidden">
+        <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} options={[{ value: 'all', label: 'Status' }, { value: 'upcoming', label: 'Upcoming' }, { value: 'overdue', label: 'Overdue' }, { value: 'scheduled', label: 'Scheduled' }]} className="flex-1 h-9 text-sm" />
+        <Select value={frequencyFilter} onChange={(e) => setFrequencyFilter(e.target.value)} options={[{ value: 'all', label: 'Frequency' }, { value: 'Weekly', label: 'Weekly' }, { value: 'Monthly', label: 'Monthly' }, { value: 'Quarterly', label: 'Quarterly' }]} className="flex-1 h-9 text-sm" />
+      </div>
+
+      {/* Desktop Filters */}
+      <Card className="mb-6 hidden md:block">
         <CardContent className="p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Statuses' },
-                { value: 'upcoming', label: 'Upcoming' },
-                { value: 'overdue', label: 'Overdue' },
-                { value: 'scheduled', label: 'Scheduled' },
-                { value: 'completed', label: 'Completed' },
-              ]}
-              className="w-40"
-            />
-
-            <Select
-              value={frequencyFilter}
-              onChange={(e) => setFrequencyFilter(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Frequencies' },
-                { value: 'Weekly', label: 'Weekly' },
-                { value: 'Monthly', label: 'Monthly' },
-                { value: 'Quarterly', label: 'Quarterly' },
-                { value: 'Annually', label: 'Annually' },
-              ]}
-              className="w-40"
-            />
-
-            <div className="ml-auto text-sm text-black/50">
-              Showing {filteredSchedule.length} of {schedule.length} tasks
-            </div>
+            <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} options={[{ value: 'all', label: 'All Statuses' }, { value: 'upcoming', label: 'Upcoming' }, { value: 'overdue', label: 'Overdue' }, { value: 'scheduled', label: 'Scheduled' }, { value: 'completed', label: 'Completed' }]} className="w-40" />
+            <Select value={frequencyFilter} onChange={(e) => setFrequencyFilter(e.target.value)} options={[{ value: 'all', label: 'All Frequencies' }, { value: 'Weekly', label: 'Weekly' }, { value: 'Monthly', label: 'Monthly' }, { value: 'Quarterly', label: 'Quarterly' }, { value: 'Annually', label: 'Annually' }]} className="w-40" />
+            <div className="ml-auto text-sm text-black/50">Showing {filteredSchedule.length} of {schedule.length} tasks</div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Maintenance Schedule */}
-      <Card>
+      {/* Mobile Card View */}
+      <div className="space-y-3 md:hidden">
+        {filteredSchedule.length === 0 ? (
+          <Card><CardContent className="p-6 text-center text-sm text-black/50">No tasks found</CardContent></Card>
+        ) : (
+          filteredSchedule.map((task) => {
+            const daysUntil = getDaysUntil(task.nextDue)
+            return (
+              <Card key={task.id}>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-black truncate">{task.title}</div>
+                      <div className="text-xs text-black/50">{task.property}</div>
+                    </div>
+                    <Badge variant={task.status === 'overdue' ? 'danger' : task.status === 'scheduled' ? 'success' : 'warning'}>
+                      {task.status}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between pt-2 border-t border-black/[0.06]">
+                    <div className="text-xs">
+                      <span className="text-black/40">Due: </span>
+                      <span className={task.status === 'overdue' ? 'text-red-600 font-medium' : ''}>{formatDate(task.nextDue, { month: 'short', day: 'numeric' })}</span>
+                    </div>
+                    <Badge variant="secondary" className="text-[10px]">{task.frequency}</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })
+        )}
+      </div>
+
+      {/* Desktop Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-6">
           {filteredSchedule.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-12">
